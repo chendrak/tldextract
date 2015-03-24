@@ -38,7 +38,7 @@ type Trie struct {
 }
 
 var (
-	schemaregex = regexp.MustCompile(`^([abcdefghijklmnopqrstuvwxyz0123456789\+\-\.]+:)?//`)
+	schemaregex = regexp.MustCompile(`^([abcdefghijklmnopqrstuvwxyz0123456789\+\-\.]+:)?//(.+:.*@){0,1}`)
 	domainregex = regexp.MustCompile(`^[a-z0-9-]{1,63}$`)
 	ip4regex    = regexp.MustCompile(`(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])`)
 )
@@ -91,10 +91,6 @@ func (extract *TLDExtract) Extract(u string) *Result {
 	input := u
 	u = strings.ToLower(u)
 	u = schemaregex.ReplaceAllString(u, "")
-	i := strings.Index(u, "@")
-	if i != -1 {
-		u = u[i+1:]
-	}
 
 	index := strings.IndexFunc(u, func(r rune) bool {
 		switch r {
